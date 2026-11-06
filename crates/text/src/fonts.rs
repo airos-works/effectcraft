@@ -85,6 +85,12 @@ impl DirectorySource {
             if let Some(h) = &home {
                 dirs.push(h.join("Library/Fonts"));
             }
+        } else if cfg!(target_os = "haiku") {
+            // air/OS (Haiku): the system's and the user's font folders, packaged and not.
+            dirs.extend(["/boot/system/data/fonts", "/boot/system/non-packaged/data/fonts"].map(PathBuf::from));
+            if let Some(h) = &home {
+                dirs.extend([h.join("config/data/fonts"), h.join("config/non-packaged/data/fonts")]);
+            }
         } else if cfg!(windows) {
             let win = std::env::var_os("WINDIR").map(PathBuf::from).unwrap_or_else(|| PathBuf::from("C:\\Windows"));
             dirs.push(win.join("Fonts"));

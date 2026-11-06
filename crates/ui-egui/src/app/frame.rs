@@ -123,7 +123,7 @@ impl EffectcraftApp {
     /// layout and no presentation: engine/job queues, autosave, playback, audio, the control
     /// channel, screenshots and the close guard. Everything here is idempotent for a pass that
     /// `Context::request_discard` replays.
-    pub fn tick(&mut self, ctx: &egui::Context, frame: &eframe::Frame) {
+    pub fn tick(&mut self, ctx: &egui::Context, frame: &crate::integration::Frame) {
         self.now = self.clock.now();
         // The compositor exists before the first paint and while hidden (device-loss handling
         // must run there too).
@@ -298,7 +298,7 @@ impl EffectcraftApp {
 
     /// One UI pass: setup, input-driven shortcuts, layout and painting. Called from
     /// `eframe::App::ui` and by tests with the root `Ui`.
-    pub fn draw(&mut self, ui: &mut egui::Ui, frame: &eframe::Frame) {
+    pub fn draw(&mut self, ui: &mut egui::Ui, frame: &crate::integration::Frame) {
         panels::viewer_text::begin_ui(ui.ctx());
         self.draw_inner(ui, frame);
         // All exits, including fonts/device loss, observe this pass's real custom availability.
@@ -319,7 +319,7 @@ impl EffectcraftApp {
     /// fonts are ready, draw the frame, finish pointer wrapping, pump queued wasm frames, record input activity,
     /// publish the completed pass's geometry and pass sequence, acknowledge applied synthetic input and answer
     /// `AfterInput` replies only after a non-discarded pass. Requests repaints while frames are in flight.
-    fn draw_inner(&mut self, ui: &mut egui::Ui, frame: &eframe::Frame) {
+    fn draw_inner(&mut self, ui: &mut egui::Ui, frame: &crate::integration::Frame) {
         let ctx = ui.ctx().clone();
         if self.gpu_failure_applied == Some(true) {
             self.close_after_device_loss(&ctx);

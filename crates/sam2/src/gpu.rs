@@ -139,6 +139,30 @@ impl Gpu {
         DEVICE.get().map(|d| d.is_ok())
     }
 
+    /// Use the host application's device instead of making one, or (`Err`) no GPU at all (a host that renders on the
+    /// CPU). One device per process is all some Vulkan drivers run comfortably (the air/OS host shares its window
+    /// device with the compositor and SAM 2). The host owns the device's error and loss handlers, so none are
+    /// installed here: it reports those itself. Only before anything has asked for the device; false when too late.
+    pub fn install(device: std::result::Result<(&wgpu::Adapter, wgpu::Device, wgpu::Queue), String>) -> bool {
+        let gpu = match device {
+            Ok((adapter, device, queue)) => {
+                let info = adapter.get_info();
+                match refusal(&info.name, info.backend, info.device_type, adapter.get_downlevel_capabilities().flags) {
+                    Some(why) => Err(why),
+                    None => Ok(Arc::new(Gpu::on(device, queue, Arc::default(), info.name))),
+                }
+            }
+            Err(why) => Err(why),
+        };
+        DEVICE.set(gpu).is_ok()
+    }
+
+    /// The kernels on `device`.
+    fn on(device: wgpu::Device, queue: wgpu::Queue, error: Arc<Mutex<Option<String>>>, adapter: String) -> Gpu {
+        let module = device.create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("sam2 kernels"), source: wgpu::ShaderSource::Wgsl(SHADER.into()) });
+        Gpu { device, queue, module, pipelines: Mutex::default(), encoder: Mutex::new(None), turn: Mutex::new(()), error, adapter }
+    }
+
     /// A device on the best real GPU (high performance unless `WGPU_POWER_PREF` says otherwise; see [`refusal`] for the
     /// adapters the CPU path runs instead of).
     fn new() -> Result<Gpu> {
@@ -167,8 +191,7 @@ impl Gpu {
         device.set_device_lost_callback(move |reason, message| {
             sink.lock().unwrap_or_else(PoisonError::into_inner).get_or_insert_with(|| format!("GPU device lost ({reason:?}): {message}"));
         });
-        let module = device.create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("sam2 kernels"), source: wgpu::ShaderSource::Wgsl(SHADER.into()) });
-        Ok(Gpu { device, queue, module, pipelines: Mutex::default(), encoder: Mutex::new(None), turn: Mutex::new(()), error, adapter: info.name })
+        Ok(Gpu::on(device, queue, error, info.name))
     }
 
     /// One GPU pass at a time: a caller holds this while it queues, flushes and reads back a whole job, so

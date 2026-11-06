@@ -13,14 +13,14 @@ use crate::dock::PanelKind;
 pub struct Driver {
     pub ctx: egui::Context,
     pub app: EffectcraftApp,
-    frame: eframe::Frame,
+    frame: crate::integration::Frame,
     time: f64,
     size: egui::Vec2,
 }
 
 impl Driver {
     pub fn new(app: EffectcraftApp, size: egui::Vec2) -> Driver {
-        Driver { ctx: egui::Context::default(), app, frame: eframe::Frame::_new_kittest(), time: 0.0, size }
+        Driver { ctx: egui::Context::default(), app, frame: crate::integration::Frame::_new_kittest(), time: 0.0, size }
     }
 
     /// Run one frame (layout + paint + tessellation); its wall time in ms.
@@ -35,8 +35,8 @@ impl Driver {
         let t0 = web_time::Instant::now();
         let (app, frame) = (&mut self.app, &mut self.frame);
         let mut out = self.ctx.run_ui(input, |ui| {
-            eframe::App::logic(app, ui.ctx(), frame);
-            eframe::App::ui(app, ui, frame);
+            crate::integration::App::logic(app, ui.ctx(), frame);
+            crate::integration::App::ui(app, ui, frame);
         });
         // No GPU here: texture uploads are dropped (counted in the frame time up to here).
         out.textures_delta.clear();

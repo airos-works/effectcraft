@@ -2,7 +2,9 @@
 
 use egui::{Context, Event, Id, PointerButton, Pos2, RawInput, Response, Vec2};
 #[cfg(any(not(target_arch = "wasm32"), test))]
-use egui::{Rect, pos2, vec2};
+use egui::{Rect, pos2};
+#[cfg(any(all(not(target_arch = "wasm32"), not(target_os = "haiku")), test))]
+use egui::vec2;
 
 #[derive(Clone, Default)]
 struct State {
@@ -130,7 +132,7 @@ fn finish_frame(ctx: &Context, bounds: Rect, warp: impl FnOnce(Pos2) -> Option<P
 
 /// Native monitor coordinates are physical pixels; egui input uses UI points.
 /// Use the monitor containing the original press, including negative desktop origins.
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(any(target_arch = "wasm32", target_os = "haiku")))]
 pub(crate) fn finish_native(ctx: &Context, frame: &eframe::Frame) {
     let pass = ctx.cumulative_pass_nr();
     if !ctx.data(|d| d.get_temp::<State>(state_id()).is_some_and(|s| s.numeric.is_some_and(|(_, p)| p == pass))) {
@@ -174,6 +176,18 @@ pub(crate) fn finish_native(ctx: &Context, frame: &eframe::Frame) {
             }
         }
     });
+}
+
+/// air/OS: the native host moves the pointer (`Frame::pointer_warp`, in the window's points).
+#[cfg(target_os = "haiku")]
+pub(crate) fn finish_native(ctx: &Context, frame: &crate::integration::Frame) {
+    let pass = ctx.cumulative_pass_nr();
+    if !ctx.data(|d| d.get_temp::<State>(state_id()).is_some_and(|s| s.numeric.is_some_and(|(_, p)| p == pass))) {
+        ctx.data_mut(|d| d.remove::<State>(state_id()));
+        return;
+    }
+    let Some(w) = &frame.pointer_warp else { return };
+    finish_frame(ctx, w.bounds, |to| (w.warp)(to));
 }
 
 #[cfg(test)]

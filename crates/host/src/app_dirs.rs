@@ -9,7 +9,8 @@
 //!    folder can't be written (read-only medium, Program Files), a warning is logged and the
 //!    platform folder is used.
 //! 3. The platform convention: macOS `~/Library/Application Support/EffectCraft`, Windows
-//!    `%APPDATA%\EffectCraft`, Linux `$XDG_CONFIG_HOME/effectcraft` or `~/.config/effectcraft`.
+//!    `%APPDATA%\EffectCraft`, Linux `$XDG_CONFIG_HOME/effectcraft` or `~/.config/effectcraft`,
+//!    air/OS (Haiku) `~/config/settings/EffectCraft`.
 
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
@@ -84,6 +85,10 @@ pub fn platform_dir(env: &impl Fn(&str) -> Option<OsString>) -> Option<PathBuf> 
     if cfg!(target_os = "windows") {
         return env("APPDATA").map(|a| PathBuf::from(a).join("EffectCraft"));
     }
+    // air/OS (Haiku): the user's settings folder, where every Haiku application keeps its own.
+    if cfg!(target_os = "haiku") {
+        return home().map(|h| h.join("config/settings/EffectCraft"));
+    }
     env("XDG_CONFIG_HOME").map(PathBuf::from).or_else(|| home().map(|h| h.join(".config"))).map(|c| c.join("effectcraft"))
 }
 
@@ -141,6 +146,8 @@ mod tests {
             assert_eq!(dir, root.join("home/Library/Application Support/EffectCraft"));
         } else if cfg!(target_os = "windows") {
             assert_eq!(dir, root.join("appdata").join("EffectCraft"));
+        } else if cfg!(target_os = "haiku") {
+            assert_eq!(dir, root.join("home/config/settings/EffectCraft"));
         } else {
             assert_eq!(dir, root.join("home/.config/effectcraft"));
         }

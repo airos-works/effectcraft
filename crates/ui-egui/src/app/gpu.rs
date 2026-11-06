@@ -154,7 +154,7 @@ impl EffectcraftApp {
     /// once the first frame has painted, so building them here kept the window from appearing
     /// at all. Until the worker is done the viewer composites on the CPU, as it does without a
     /// GPU, and the status bar says so; the browser has no threads and builds it in place.
-    pub(crate) fn init_gpu(&mut self, ctx: &egui::Context, frame: &eframe::Frame) {
+    pub(crate) fn init_gpu(&mut self, ctx: &egui::Context, frame: &crate::integration::Frame) {
         #[cfg(not(target_arch = "wasm32"))]
         if self.gpu_build.is_some() {
             self.finish_gpu_build(frame.wgpu_render_state());
@@ -196,7 +196,7 @@ impl EffectcraftApp {
     /// back to [`Self::finish_gpu_build`] and wakes the UI. False when no thread could be spawned
     /// (the caller then builds it in place).
     #[cfg(not(target_arch = "wasm32"))]
-    fn spawn_gpu_build(&mut self, ctx: &egui::Context, rs: &eframe::egui_wgpu::RenderState) -> bool {
+    fn spawn_gpu_build(&mut self, ctx: &egui::Context, rs: &crate::integration::egui_wgpu::RenderState) -> bool {
         let (tx, rx) = std::sync::mpsc::channel();
         let (adapter, device, queue) = (rs.adapter.clone(), rs.device.clone(), rs.queue.clone());
         let gate = self.hooks.before_gpu_build.take();
@@ -229,7 +229,7 @@ impl EffectcraftApp {
     /// Take the worker's result when it has arrived ([`Self::init_gpu`]). `rs`: the window's
     /// device, which a compositor that built is attached to.
     #[cfg(not(target_arch = "wasm32"))]
-    fn finish_gpu_build(&mut self, rs: Option<&eframe::egui_wgpu::RenderState>) {
+    fn finish_gpu_build(&mut self, rs: Option<&crate::integration::egui_wgpu::RenderState>) {
         let Some(rx) = &self.gpu_build else { return };
         let built = match rx.try_recv() {
             Ok(built) => built,
@@ -252,7 +252,7 @@ impl EffectcraftApp {
 
     /// Attach a built compositor to the viewer, or record why there is none. Keeps the document
     /// and the egui renderer either way; without a compositor the viewer composites on the CPU.
-    fn attach_gpu(&mut self, built: GpuBuild, rs: Option<&eframe::egui_wgpu::RenderState>) {
+    fn attach_gpu(&mut self, built: GpuBuild, rs: Option<&crate::integration::egui_wgpu::RenderState>) {
         match built {
             Ok(Ok(g)) => {
                 if let Some(bridge) = &self.gpu_failures {

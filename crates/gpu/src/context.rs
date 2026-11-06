@@ -1569,7 +1569,7 @@ impl GpuContext {
         let before = self.pool.lock().map(|mut p| p.frame_end()).unwrap_or_default();
         if before > 0 {
             // A work-done callback waits for a submission; an empty one closes the wait.
-            let index = self.queue.submit([]);
+            let index = submit_marker(&self.device, &self.queue);
             self.poll_wait(index, crate::readback::TIMEOUT);
             if let Ok(mut p) = self.pool.lock() {
                 p.waited(before);
@@ -1983,7 +1983,7 @@ impl<'g> Enc<'g> {
         if let Ok(mut p) = self.g.pool.lock() {
             p.flush_owned(self.owner);
         }
-        let idx = self.last_submit.take().unwrap_or_else(|| self.g.queue.submit([]));
+        let idx = self.last_submit.take().unwrap_or_else(|| submit_marker(&self.g.device, &self.g.queue));
         self.g.poll_wait(idx, self.g.memcap.wait_timeout());
         self.g.memcap.record_wait(self.g.allocated_bytes(), self.g.kept_bytes(self.owner, None));
     }
@@ -2216,6 +2216,15 @@ pub(crate) fn mip_levels(w: u32, h: u32) -> u32 {
     u32::BITS - w.max(h).max(1).leading_zeros()
 }
 
+/// A submission to wait on when there is nothing to submit: one empty command buffer rather than
+/// an empty batch. wgpu's empty batch still waits for the submission before it, and some drivers
+/// can't do that without command buffers (air/OS's RADV before mesa-amdgpu 1a02b91f reported the
+/// device lost for it).
+fn submit_marker(device: &wgpu::Device, queue: &wgpu::Queue) -> wgpu::SubmissionIndex {
+    let encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: Some("wait marker") });
+    queue.submit([encoder.finish()])
+}
+
 #[cfg(test)]
 mod pool_stall_tests {
     use super::Pool;
@@ -2302,3 +2311,4 @@ mod adapter_name_tests {
         assert!(e.contains("no adapters on the enabled backends"), "{e}");
     }
 }
+

@@ -85,8 +85,8 @@ pub(crate) fn zoom_texture_options(smooth: bool) -> egui::TextureOptions {
 /// bilinearly within and between mip levels, so a frame shown below 100 % is averaged instead of
 /// skipping pixels (#417); Faster takes the nearest pixel of the full-size frame. Magnified, both
 /// show the nearest pixel (#882).
-pub(crate) fn zoom_sampler(smooth: bool) -> eframe::wgpu::SamplerDescriptor<'static> {
-    use eframe::wgpu::{FilterMode, MipmapFilterMode, SamplerDescriptor};
+pub(crate) fn zoom_sampler(smooth: bool) -> crate::integration::wgpu::SamplerDescriptor<'static> {
+    use crate::integration::wgpu::{FilterMode, MipmapFilterMode, SamplerDescriptor};
     let label = Some("viewer frame");
     if smooth {
         SamplerDescriptor {

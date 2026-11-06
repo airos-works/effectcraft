@@ -12,8 +12,8 @@
 use std::sync::Arc;
 
 use effectcraft_engine::viewer::{Channel, DisplayPass, PassColor, PassConv, PassCurve};
-use eframe::egui_wgpu;
-use eframe::wgpu;
+use crate::integration::egui_wgpu;
+use crate::integration::wgpu;
 
 use crate::frames::F16Frame;
 

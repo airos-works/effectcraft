@@ -32,6 +32,7 @@ pub mod frames;
 pub mod gpu_failure;
 pub mod header;
 pub mod i18n;
+pub mod integration;
 pub mod icons;
 pub mod menu_keys;
 pub mod menus;
@@ -326,7 +327,7 @@ pub struct EffectcraftApp {
     pub(crate) viewer_f16: Option<Arc<frames::F16Frame>>,
     /// The window's egui-wgpu device (with or without a GPU compositor on it): the display pass
     /// runs there.
-    pub(crate) window_wgpu: Option<eframe::egui_wgpu::RenderState>,
+    pub(crate) window_wgpu: Option<crate::integration::egui_wgpu::RenderState>,
     /// The display pass on that device (made with the first frame that needs it), and whether
     /// making it failed (the pass then runs on the CPU).
     pub(crate) display_gpu: Option<Arc<display_gpu::DisplayGpu>>,
@@ -340,7 +341,7 @@ pub struct EffectcraftApp {
     /// wasm32: an asynchronous readback of a GPU viewer frame (key asked for, result).
     viewer_readback: (Option<FrameKey>, Arc<std::sync::Mutex<Option<(FrameKey, Arc<egui::ColorImage>)>>>),
     /// egui-wgpu's device, once the first frame arrives (desktop and WebGPU).
-    pub(crate) wgpu: Option<eframe::egui_wgpu::RenderState>,
+    pub(crate) wgpu: Option<crate::integration::egui_wgpu::RenderState>,
     /// The GPU compositor on that device (None: no usable adapter → CPU only).
     pub(crate) gpu: Option<effectcraft_gpu::Gpu>,
     gpu_checked: bool,

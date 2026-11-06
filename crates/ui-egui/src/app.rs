@@ -141,7 +141,7 @@ impl EffectcraftApp {
     }
 }
 
-impl eframe::App for EffectcraftApp {
+impl crate::integration::App for EffectcraftApp {
     fn on_exit(&mut self) {
         self.save_workspace_state();
         // Clean exit: no crash recovery next launch (unless the graphics device was lost with
@@ -173,7 +173,7 @@ impl eframe::App for EffectcraftApp {
     /// The logic-only tick: run `tick`, close the IME pass with `finish_ime_logic` and, last, hand a close to the
     /// platform quit (`panels::unsaved::quit_on_close`). It does not read pass-time
     /// input state (events, pointer and time are stale here), only the viewport information eframe refreshed.
-    fn logic(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn logic(&mut self, ctx: &egui::Context, frame: &mut crate::integration::Frame) {
         // Never `ctx.input(|i| i.time)` here: `Context::run_logic` leaves events, pointer state and
         // time at the previous full pass's values (only the viewport information is refreshed).
         self.tick(ctx, frame);
@@ -182,7 +182,7 @@ impl eframe::App for EffectcraftApp {
     }
 
     /// Draw one UI pass through `draw`.
-    fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+    fn ui(&mut self, ui: &mut egui::Ui, frame: &mut crate::integration::Frame) {
         self.draw(ui, frame);
     }
 }
