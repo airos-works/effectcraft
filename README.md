@@ -1,3 +1,7 @@
+<h1 align="center">EffectCraft for air/OS</h1>
+
+This independent fork ports [EffectCraft by the ArtCraft team](https://github.com/storytold/effectcraft) to air/OS (Haiku), with a native Be API host: Vulkan for the window and the GPU compositor, effects and exports, a software fallback, and the Media Kit for preview audio and extra footage formats. See [build instructions and notes](docs/haiku.md). The upstream project does not maintain or support this port.
+
 <p align="center">
   <a href="https://getartcraft.com/">
     <picture>

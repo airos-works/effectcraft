@@ -1,0 +1,8 @@
+asset:        EffectCraft.svg
+title:        EffectCraft air/OS application icon (SVG preview)
+author:       EffectCraft for air/OS contributors
+source:       original work
+license:      MIT OR Apache-2.0
+license-file: LICENSE-MIT, LICENSE-APACHE
+added:        2026-11-07 by EffectCraft for air/OS contributors
+notes:        The SVG rendering of EffectCraft.hvif written by tools/haiku/make-icon.py.

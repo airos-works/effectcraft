@@ -1,0 +1,20 @@
+name effectcraft
+version 0.21.0~airos1-1
+architecture x86_64
+summary "Motion graphics and visual effects compositor"
+description "EffectCraft for air/OS: the Rust motion graphics and effects compositor with native windows, file panels and clipboard; the compositor, effects and exports run on Vulkan on supported hardware, with a software fallback; preview audio and extra footage formats through the Media Kit."
+packager "EffectCraft for air/OS"
+vendor "airos-works"
+copyrights { "2026 EffectCraft contributors" }
+licenses { "MIT" "Apache v2" }
+urls { "https://github.com/airos-works/effectcraft" }
+provides {
+    effectcraft = 0.21.0
+    app:EffectCraft = 0.21.0
+}
+requires {
+    haiku >= r1~beta6
+    lib:libstdc++
+    lib:libgcc_s
+}
+post-install-scripts { "boot/post-install/effectcraft.sh" }

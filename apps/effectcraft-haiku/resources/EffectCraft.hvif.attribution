@@ -1,0 +1,8 @@
+asset:        EffectCraft.hvif
+title:        EffectCraft air/OS application icon (HVIF)
+author:       EffectCraft for air/OS contributors
+source:       original work
+license:      MIT OR Apache-2.0
+license-file: LICENSE-MIT, LICENSE-APACHE
+added:        2026-11-07 by EffectCraft for air/OS contributors
+notes:        Drawn as vectors by tools/haiku/make-icon.py (tools/haiku/icon_art.py, hvif.py): a composition frame on a receding plane, a magenta light streak and a four-pointed sparkle. No raster input or other artwork.
