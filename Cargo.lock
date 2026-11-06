@@ -1642,6 +1642,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "effectcraft-haiku"
+version = "0.21.0"
+dependencies = [
+ "ash",
+ "cc",
+ "effectcraft-engine",
+ "effectcraft-gpu",
+ "effectcraft-host",
+ "effectcraft-media",
+ "effectcraft-model",
+ "effectcraft-project",
+ "effectcraft-raster",
+ "effectcraft-render",
+ "effectcraft-sam2",
+ "effectcraft-time",
+ "effectcraft-ui-egui",
+ "egui",
+ "egui-wgpu",
+ "image",
+ "log",
+ "pollster 1.0.1",
+ "rayon",
+ "serde_json",
+ "wgpu",
+]
+
+[[package]]
 name = "effectcraft-helper-host"
 version = "0.21.0"
 dependencies = [

@@ -1,0 +1,47 @@
+[package]
+name = "effectcraft-haiku"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "EffectCraft native air/OS host"
+
+# The Be API is C++: the host's FFI boundary (src/host.rs, src/platform.rs, …) needs `unsafe`,
+# as every Craft host for air/OS does. Everything above it is the unchanged app.
+[lints.rust]
+unsafe_code = "deny"
+[lints.clippy]
+disallowed_methods = "allow"
+
+[[bin]]
+name = "EffectCraft"
+path = "src/main.rs"
+
+[dependencies]
+effectcraft-engine.workspace = true
+effectcraft-host.workspace = true
+effectcraft-ui-egui.workspace = true
+effectcraft-media.workspace = true
+effectcraft-gpu.workspace = true
+effectcraft-sam2.workspace = true
+effectcraft-project.workspace = true
+effectcraft-raster.workspace = true
+effectcraft-render.workspace = true
+effectcraft-time.workspace = true
+effectcraft-model.workspace = true
+egui.workspace = true
+# The clipboard's PNG copy of an egui image (src/platform.rs).
+image = { workspace = true }
+serde_json.workspace = true
+log.workspace = true
+rayon.workspace = true
+
+[target.'cfg(target_os = "haiku")'.dependencies]
+wgpu = { workspace = true, features = ["vulkan"] }
+egui-wgpu = { version = "0.37", default-features = false }
+# The raw Vulkan device, to import the screen's frame buffer (src/present.rs); the version wgpu-hal uses.
+ash = "0.38"
+pollster.workspace = true
+
+[build-dependencies]
+cc = "1"
