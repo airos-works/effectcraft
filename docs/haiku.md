@@ -128,3 +128,27 @@ EffectCraft embeds no craft-fonts. The air/OS images build it with airos-ci's
 
 The icon (`apps/effectcraft-haiku/resources/EffectCraft.hvif`) is original vector art drawn
 by `tools/haiku/make-icon.py` (MIT OR Apache-2.0).
+
+## Tested on the x399 (7 November 2026)
+
+The x399 workstation (GeForce GTX 1070 on NVK, Mesa 25.3.0-devel, hrev60207+2472), with the
+package build of commit `9bca28fc` and the build before it:
+
+- Vulkan on the GTX 1070 with changed-tile readback; the GPU compositor attached to the same
+  device ("Mercury GPU Acceleration", 280 GPU effects). A 1920×1080 comp with a solid, a text
+  layer with Gaussian Blur and Glow, and four footage layers drew in the viewer; a 60-frame
+  H.264 export of it took 6.0 s and the file got its type (`video/mp4`).
+- Media Kit: preview audio through the `BSoundPlayer` node (48 kHz; 278 400 frames played,
+  peak −18.8 dBFS from a Vorbis track). With `EFFECTCRAFT_MEDIA_KIT=prefer`, an MPEG-TS H.264
+  clip was decoded by the NVDEC hardware decoder plugin ("H.264 on the graphics card (NVDEC)
+  (mpegts) · Media Kit") and a WebM VP8 clip by the ffmpeg plugin; the saved project opened
+  them the same way again.
+- `EFFECTCRAFT_RENDERER=cpu`: software windows and CPU compositing, the same comps drawn.
+- `EFFECTCRAFT_TEST_GPU_FAULT=25`: at the fault the compositor and the window switched to
+  software; editing, rendering and the project went on.
+- A second launch with a file handed it to the running copy (which imported it) and ended
+  in 23 ms; Quit with unsaved changes asked Save / Don't Save / Cancel; every run quit
+  cleanly through `hey EffectCraft quit`, with nothing in the syslog.
+
+Not tried: floating panels in their own windows, the direct presentation, the arm64 build on
+a board (it builds), and a real lost device.
