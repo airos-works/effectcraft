@@ -404,6 +404,11 @@ fn about_main(app: &mut EffectcraftApp, ui: &mut egui::Ui, t: &Tokens, cmd: &mut
         t.text_dim,
     );
     ui.add_space(12.0);
+    // air/OS builds are a modified version: LICENSE-brand.txt lets them say, in plain text, what
+    // they are based on, but not present themselves as an ArtCraft product.
+    #[cfg(target_os = "haiku")]
+    ui.label("A clean-room, open-source compositor for motion graphics and visual effects. EffectCraft for air/OS is an independent port based on EffectCraft by the ArtCraft team; it is not an ArtCraft product.");
+    #[cfg(not(target_os = "haiku"))]
     ui.label(tr("A clean-room, open-source compositor for motion graphics and visual effects: native on macOS, Windows and Linux, and in the browser. Part of the ArtCraft family of creative apps."));
     ui.add_space(14.0);
     let links: [(Icon, &str, &str, &'static str); 4] = [

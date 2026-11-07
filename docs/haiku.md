@@ -101,6 +101,13 @@ threads for this kind of work. `EFFECTCRAFT_THREADS=N` overrides it.
   it); fonts are read from the system's and the user's font folders.
 - **Updates**: the package is updated by pkgman and SoftwareUpdater; the start-up update
   check is off. The community links stay.
+- **No ArtCraft marks** (since `0.21.0~airos1-2`): this port is a published modified version,
+  so as `docs/brand/LICENSE-brand.txt` requires, the header's About button and the About
+  dialog show EffectCraft's own icon where upstream paints the ArtCraft mark, the About text
+  says the port is based on EffectCraft by the ArtCraft team and is not an ArtCraft product,
+  and the mark files are removed from this repository (`docs/brand/README.md`). The icon swap
+  applies to every build of this fork, since the files are gone; the About text is air/OS
+  only. Links to getartcraft.com and the Discord stay.
 - **Plug-ins** (WebAssembly, in `Plug-ins`) work as upstream. **Effect helpers** (external
   native programs) start only with `EFFECTCRAFT_HELPERS=1` or Effect ▸ Scan for Effect
   Helpers, as upstream; none are built for air/OS, so the scan finds none.

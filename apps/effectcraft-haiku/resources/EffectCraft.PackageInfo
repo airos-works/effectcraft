@@ -1,5 +1,5 @@
 name effectcraft
-version 0.21.0~airos1-1
+version 0.21.0~airos1-2
 architecture x86_64
 summary "Motion graphics and visual effects compositor"
 description "EffectCraft for air/OS: the Rust motion graphics and effects compositor with native windows, file panels and clipboard; the compositor, effects and exports run on Vulkan on supported hardware, with a software fallback; preview audio and extra footage formats through the Media Kit."

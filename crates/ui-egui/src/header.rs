@@ -901,20 +901,21 @@ fn run_workspace_command(app: &mut EffectcraftApp, ui: &egui::Ui, id: &str) {
     }
 }
 
-/// The ArtCraft mark as supplied in `docs/brand` (the README's and getartcraft.com's logo; used
-/// unmodified, see `docs/brand/LICENSE-brand.txt`).
-static ARTCRAFT_MARK: &[u8] = include_bytes!("../../../docs/brand/artcraft-mark.png");
+/// EffectCraft's own app icon. This fork is a modified version, so `docs/brand/LICENSE-brand.txt`
+/// requires the ArtCraft mark the upstream app shows here to be removed (the mark files are not in
+/// this fork).
+static LOGO: &[u8] = include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ai.storyteller.effectcraft.png");
 
-/// The ArtCraft mark in `r` (decoded once into a mipmapped texture, so it stays crisp from the
+/// The app icon in `r` (decoded once into a mipmapped texture, so it stays crisp from the
 /// 24 px Tools bar to the About dialog). Nothing is drawn if it can't be decoded.
 pub fn paint_logo(p: &egui::Painter, r: Rect) {
     let ctx = p.ctx();
-    let id = egui::Id::unique("artcraft-mark");
+    let id = egui::Id::unique("app-logo");
     let tex = ctx.data(|d| d.get_temp::<Option<egui::TextureHandle>>(id)).unwrap_or_else(|| {
-        let tex = image::load_from_memory_with_format(ARTCRAFT_MARK, image::ImageFormat::Png).ok().map(|img| {
+        let tex = image::load_from_memory_with_format(LOGO, image::ImageFormat::Png).ok().map(|img| {
             let img = img.to_rgba8();
             let ci = egui::ColorImage::from_rgba_unmultiplied([img.width() as usize, img.height() as usize], img.as_raw());
-            ctx.load_texture("artcraft-mark", ci, egui::TextureOptions::LINEAR.with_mipmap_mode(Some(egui::TextureFilter::Linear)))
+            ctx.load_texture("app-logo", ci, egui::TextureOptions::LINEAR.with_mipmap_mode(Some(egui::TextureFilter::Linear)))
         });
         ctx.data_mut(|d| d.insert_temp(id, tex.clone()));
         tex

@@ -3,16 +3,6 @@
 This independent fork ports [EffectCraft by the ArtCraft team](https://github.com/storytold/effectcraft) to air/OS (Haiku), with a native Be API host: Vulkan for the window and the GPU compositor, effects and exports, a software fallback, and the Media Kit for preview audio and extra footage formats. See [build instructions and notes](docs/haiku.md). The upstream project does not maintain or support this port.
 
 <p align="center">
-  <a href="https://getartcraft.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="docs/brand/artcraft-logo-white.svg">
-      <img alt="ArtCraft" src="docs/brand/artcraft-logo.svg" width="200">
-    </picture>
-  </a>
-</p>
-
-
-<p align="center">
   <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.effectcraft.png" width="128" height="128" alt="EffectCraft icon: an engraved unicorn on a pink tile">
 </p>
 
@@ -392,15 +382,12 @@ Copyright (c) 2026 ArtCraft Team and the EffectCraft contributors. Required noti
 Bundled fonts, icons, images and other assets keep their own open licenses; each one is listed
 with its author, source and license in [ATTRIBUTION.md](ATTRIBUTION.md).
 
-The ArtCraft name, wordmark and logos in [`docs/brand/`](docs/brand/) are trademarks of the
-ArtCraft Team and are not covered by this license. They may be used only unmodified, and only as
-part of this repository and EffectCraft, under [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt).
-Forks and modified versions must remove them.
+The ArtCraft name, wordmark and logos are trademarks of the ArtCraft Team and are not covered by
+this license. This fork is a modified version, so as [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt)
+requires, the marks have been removed from it ([`docs/brand/README.md`](docs/brand/README.md)).
 
-<p align="center">
-  <a href="https://getartcraft.com/"><img alt="ArtCraft" src="docs/brand/artcraft-mark.svg" width="28"></a><br>
-  <sub>Made by the <a href="https://getartcraft.com/">ArtCraft</a> team and community.</sub>
-</p>
+EffectCraft for air/OS is based on [EffectCraft](https://github.com/storytold/effectcraft) by the
+[ArtCraft](https://getartcraft.com/) team. It is not an ArtCraft product.
 
 ## Star history
 
