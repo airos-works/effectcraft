@@ -62,6 +62,19 @@ This independent fork ports [EffectCraft by the ArtCraft team](https://github.co
   <a href="#license-and-credits">License</a>
 </p>
 
+<!-- airos-ci:latest-builds:start -->
+## Latest builds
+
+Built automatically by air/OS CI from commit `0b47cbe` on 2026-11-07 ([all files](https://github.com/airos-works/effectcraft/releases/tag/latest)).
+
+| Architecture | Package |
+|---|---|
+| arm64 | [effectcraft-0.21.0.airos1-1-arm64.hpkg](https://github.com/airos-works/effectcraft/releases/download/latest/effectcraft-0.21.0.airos1-1-arm64.hpkg) |
+| x86_64 | [effectcraft-0.21.0.airos1-1-x86_64.hpkg](https://github.com/airos-works/effectcraft/releases/download/latest/effectcraft-0.21.0.airos1-1-x86_64.hpkg) |
+
+Install with `pkgman install <file>`, or copy the file into `/boot/system/packages`. Haiku SDK: x86_64 hrev60207-2472-gb062da1ebf, arm64 hrev60207-2472-gb062da1ebf.
+<!-- airos-ci:latest-builds:end -->
+
 ## What EffectCraft is
 
 EffectCraft is for animated titles, motion graphics and compositing work: the kind of thing
